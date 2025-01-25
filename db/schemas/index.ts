@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { users } from "@/db/schema";
+import { users, events } from "@/db/schema";
 import { createInsertSchema } from "drizzle-zod";
 
 export const baseUserSchema = createInsertSchema(users);
@@ -38,3 +38,5 @@ export const credentialsSignInSchema = baseUserSchema.extend({
     .min(1, "É necessário informar um email"),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
+
+export const insertEventSchema = createInsertSchema(events);

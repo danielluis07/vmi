@@ -44,8 +44,6 @@ export const credentialsSignIn = async (
       return { success: false, message: "Senha incorreta!" };
     }
 
-    console.log("Usuário encontrado para o usuário com a role:", existingUser);
-
     await signIn("credentials", {
       email,
       password,

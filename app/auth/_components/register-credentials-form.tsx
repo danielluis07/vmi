@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { User, Briefcase, Loader2 } from "lucide-react";
+import { User, Briefcase } from "lucide-react";
 import {
   Card,
   CardContent,

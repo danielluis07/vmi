@@ -8,6 +8,13 @@
       "when": 1737716150435,
       "tag": "0000_illegal_captain_flint",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1737843118820,
+      "tag": "0001_loud_selene",
+      "breakpoints": true
     }
   ]
 }

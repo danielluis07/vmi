@@ -12,6 +12,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/core": "^0.37.4",
     "@auth/drizzle-adapter": "^1.7.4",
     "@hono/auth-js": "^1.0.15",
     "@hono/zod-validator": "^0.4.2",

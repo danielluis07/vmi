@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import { db } from "@/db/drizzle";
-import authConfig from "./auth.config";
+import authConfig from "@/auth.config";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { users, account } from "@/db/schema";
 import { eq } from "drizzle-orm";

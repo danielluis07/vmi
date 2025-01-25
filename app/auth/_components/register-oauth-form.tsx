@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { User, Briefcase, Loader2 } from "lucide-react";
+import { User, Briefcase } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -30,6 +30,7 @@ import { ExtendedUser } from "@/next-auth";
 import { oAuthRegister } from "@/app/auth/_actions/oauth-register";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 type FormData = z.infer<typeof oAuthRegisterSchema>;
 
@@ -277,19 +278,14 @@ export const RegisterOAuthForm = ({ user }: { user: ExtendedUser }) => {
                   }}>
                   Voltar
                 </Button>
-                <Button
+                <LoadingButton
                   type="submit"
+                  className="w-full"
+                  isPending={isPending}
                   disabled={!form.formState.isValid || isPending}
-                  className="w-full">
-                  {isPending ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <Loader2 className="animate-spin" />
-                      Finalizando
-                    </div>
-                  ) : (
-                    "Finalizar cadastro"
-                  )}
-                </Button>
+                  label="Finalizar Cadastro"
+                  loadingLabel="Finalizando"
+                />
               </div>
             )}
           </CardFooter>
