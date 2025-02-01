@@ -143,10 +143,13 @@ export const events = pgTable("events", {
   }),
   name: text("name").notNull(),
   description: text("description"),
-  image: text("image"),
+  image: text("image").notNull(),
   status: eventStatus("status"),
-  mode: eventMode("mode"),
-  location: text("location"),
+  mode: eventMode("mode").notNull(),
+  city: text("city"),
+  neighborhood: text("neighborhood"),
+  address: text("address"),
+  uf: text("uf"),
   startDate: timestamp("start_date", { withTimezone: true }).notNull(),
   endDate: timestamp("end_date", { withTimezone: true }).notNull(),
   map: text("map"),
@@ -214,9 +217,9 @@ export const tickets = pgTable("tickets", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  eventId: text("event_id")
-    .notNull()
-    .references(() => events.id, { onDelete: "cascade" }),
+  eventId: text("event_id").references(() => events.id, {
+    onDelete: "cascade",
+  }),
   batchId: text("batch_id").references(() => batches.id, {
     onDelete: "cascade",
   }),
@@ -224,11 +227,26 @@ export const tickets = pgTable("tickets", {
     onDelete: "set null",
   }),
   price: integer("price").notNull(),
-  isNominal: boolean("is_nominal").default(false),
-  status: ticketStatus("status"), // "available", "sold", "cancelled"
+  isNominal: boolean("is_nominal").default(false).notNull(),
+  status: ticketStatus("status"),
   purchaseDate: timestamp("purchase_date", { withTimezone: true }),
+  quantity: integer("quantity").notNull(),
+  sectorId: text("sector_id").references(() => ticketSector.id, {
+    onDelete: "set null",
+  }),
+  obs: text("obs"),
   qrCode: text("qr_code").unique(),
+  file: text("file").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const ticketSector = pgTable("ticket_sectors", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 export const ticketPurchases = pgTable("ticket_purchases", {

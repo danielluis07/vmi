@@ -1,0 +1,2 @@
+ALTER TABLE "tickets" ADD COLUMN "sector" text;--> statement-breakpoint
+ALTER TABLE "tickets" ADD CONSTRAINT "tickets_sector_ticket_sectors_id_fk" FOREIGN KEY ("sector") REFERENCES "public"."ticket_sectors"("id") ON DELETE set null ON UPDATE no action;

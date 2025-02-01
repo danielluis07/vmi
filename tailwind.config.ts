@@ -14,6 +14,7 @@ export default {
         foreground: "hsl(var(--foreground))",
         success: "var(--success)",
         error: "var(--error)",
+        skeleton: "hsl(var(--skeleton))",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -34,6 +35,9 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
+        tiptap: {
+          DEFAULT: "hsl(var(--tiptap))",
+        },
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
@@ -43,8 +47,9 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         border: "hsl(var(--border))",
-        input: "var(--input)",
+        input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        label: "hsl(var(--label))",
         chart: {
           "1": "hsl(var(--chart-1))",
           "2": "hsl(var(--chart-2))",
@@ -62,6 +67,12 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      screens: {
+        xxs: "400px",
+        xs: "500px",
+        lgg: "1200px",
+        maxlgg: { max: "1200px" },
       },
       borderRadius: {
         lg: "var(--radius)",

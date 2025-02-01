@@ -22,7 +22,7 @@ export const credentialsSignUp = async (
       validatedValues.data;
 
     if (!role || !name || !email || !cpf_cnpj || !phone || !password) {
-      return { success: false, message: "Estão faltando campos" };
+      return { success: false, message: "Campos obrigatórios não preenchidos" };
     }
 
     const [existingUser] = await db

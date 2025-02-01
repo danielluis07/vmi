@@ -1,6 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 
-export type ExtendedUser = DefaultSession["user"] & {
+type ExtendedUser = DefaultSession["user"] & {
   isTwoFactorEnabled: boolean;
   isOAuth: boolean;
   role: "ADMIN" | "USER" | "PRODUCER";

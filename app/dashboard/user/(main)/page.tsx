@@ -1,7 +1,7 @@
 const UserPage = async () => {
   return (
     <div>
-      <p>user page</p>
+      <p>user main page</p>
     </div>
   );
 };

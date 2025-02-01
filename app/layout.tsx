@@ -5,6 +5,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
+import { ExitModal } from "@/components/exit-modal";
+import { ExitProvider } from "@/providers/exit-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +37,7 @@ export default async function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <QueryProvider>
             {children}
+            <ExitProvider />
             <Toaster />
           </QueryProvider>
         </body>

@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { db } from "@/db/drizzle";
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { users } from "@/db/schema";
 import { credentialsSignInSchema } from "@/db/schemas";
 import bcrypt from "bcryptjs";
@@ -23,7 +23,7 @@ export const credentialsSignIn = async (
     const { email, password } = validatedValues.data;
 
     if (!email || !password) {
-      return { success: false, message: "Estão faltando campos" };
+      return { success: false, message: "Campos obrigatórios não preenchidos" };
     }
 
     const [existingUser] = await db

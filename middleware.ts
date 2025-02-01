@@ -30,20 +30,20 @@ export default auth(async (req) => {
     const isProducerRoute = nextUrl.pathname.startsWith("/dashboard/producer");
     const isAdminRoute = nextUrl.pathname.startsWith("/dashboard/admin");
 
-    if (role === "USER" && !isUserRoute) {
+    if (role === "USER" && !isUserRoute && !isPublicRoute) {
       return Response.redirect(new URL("/dashboard/user", nextUrl));
     }
-    if (role === "PRODUCER" && !isProducerRoute) {
+    if (role === "PRODUCER" && !isProducerRoute && !isPublicRoute) {
       return Response.redirect(new URL("/dashboard/producer", nextUrl));
     }
-    if (role === "ADMIN" && !isAdminRoute) {
+    if (role === "ADMIN" && !isAdminRoute && !isPublicRoute) {
       return Response.redirect(new URL("/dashboard/admin", nextUrl));
     }
   }
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(`/dasboard/${role}`, nextUrl));
+      return Response.redirect(new URL(`/dashboard/${role}`, nextUrl));
     }
     return undefined;
   }

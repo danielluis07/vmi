@@ -189,7 +189,7 @@ export const SignUpCredentialsForm = () => {
                 <FormField
                   control={form.control}
                   name="name"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
@@ -200,16 +200,14 @@ export const SignUpCredentialsForm = () => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="email"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
@@ -220,16 +218,14 @@ export const SignUpCredentialsForm = () => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="cpf_cnpj"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>{role === "USER" ? "CPF" : "CNPJ"}</FormLabel>
                       <FormControl>
@@ -252,16 +248,14 @@ export const SignUpCredentialsForm = () => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="phone"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Telefone</FormLabel>
                       <FormControl>
@@ -278,16 +272,14 @@ export const SignUpCredentialsForm = () => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="password"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Senha</FormLabel>
                       <FormControl>
@@ -299,16 +291,14 @@ export const SignUpCredentialsForm = () => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="repeat_password"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Repita a senha</FormLabel>
                       <FormControl>
@@ -320,9 +310,7 @@ export const SignUpCredentialsForm = () => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

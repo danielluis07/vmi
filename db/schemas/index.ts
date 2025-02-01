@@ -1,8 +1,13 @@
 import { z } from "zod";
-import { users, events } from "@/db/schema";
+import { users, events, tickets } from "@/db/schema";
 import { createInsertSchema } from "drizzle-zod";
+import { File } from "node-fetch";
 
 export const baseUserSchema = createInsertSchema(users);
+
+export const baseEventSchema = createInsertSchema(events);
+
+const baseTicketsSchema = createInsertSchema(tickets);
 
 export const credentialsSignUpSchema = baseUserSchema
   .extend({
@@ -39,4 +44,69 @@ export const credentialsSignInSchema = baseUserSchema.extend({
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
 
-export const insertEventSchema = createInsertSchema(events);
+export const createEventSchema = baseEventSchema.extend({
+  image: z.array(z.instanceof(File)).optional(), // Enforce File[] type
+  ticket: baseTicketsSchema.extend({
+    file: z.instanceof(File).optional(),
+  }),
+});
+
+export const modes: Array<"IN_PERSON" | "ONLINE"> = ["IN_PERSON", "ONLINE"];
+
+export const uf: Array<
+  | "AC"
+  | "AL"
+  | "AP"
+  | "AM"
+  | "BA"
+  | "CE"
+  | "DF"
+  | "ES"
+  | "GO"
+  | "MA"
+  | "MT"
+  | "MS"
+  | "MG"
+  | "PA"
+  | "PB"
+  | "PR"
+  | "PE"
+  | "PI"
+  | "RJ"
+  | "RN"
+  | "RS"
+  | "RO"
+  | "RR"
+  | "SC"
+  | "SP"
+  | "SE"
+  | "TO"
+> = [
+  "AC",
+  "AL",
+  "AP",
+  "AM",
+  "BA",
+  "CE",
+  "DF",
+  "ES",
+  "GO",
+  "MA",
+  "MT",
+  "MS",
+  "MG",
+  "PA",
+  "PB",
+  "PR",
+  "PE",
+  "PI",
+  "RJ",
+  "RN",
+  "RS",
+  "RO",
+  "RR",
+  "SC",
+  "SP",
+  "SE",
+  "TO",
+];

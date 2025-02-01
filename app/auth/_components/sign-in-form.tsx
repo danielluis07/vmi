@@ -30,6 +30,7 @@ import { credentialsSignInSchema } from "@/db/schemas";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { credentialsSignIn } from "../_actions/credentials-sign-in";
+import { cn } from "@/lib/utils";
 
 type FormData = z.infer<typeof credentialsSignInSchema>;
 
@@ -99,7 +100,7 @@ export const SignInForm = () => {
               <FormField
                 control={form.control}
                 name="email"
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
@@ -110,16 +111,14 @@ export const SignInForm = () => {
                         value={field.value ?? ""}
                       />
                     </FormControl>
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
                 name="password"
-                render={({ field, fieldState }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
@@ -130,9 +129,7 @@ export const SignInForm = () => {
                         value={field.value ?? ""}
                       />
                     </FormControl>
-                    {fieldState.error && (
-                      <FormMessage>{fieldState.error.message}</FormMessage>
-                    )}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -156,7 +153,10 @@ export const SignInForm = () => {
       <CardFooter className="justify-center">
         <Link
           href="/auth/sign-up"
-          className="text-muted-foreground underline-offset-4 text-sm hover:underline">
+          className={cn(
+            "text-muted-foreground underline-offset-4 text-sm hover:underline",
+            isPending && "pointer-events-none"
+          )}>
           Não possui uma conta? Cadastre-se
         </Link>
       </CardFooter>

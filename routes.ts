@@ -9,6 +9,7 @@ export const publicRoutes = [
   "/event",
   "/auth/new-verification",
   "/api",
+  "/test",
 ];
 
 /**

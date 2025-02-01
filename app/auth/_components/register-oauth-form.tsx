@@ -188,7 +188,7 @@ export const RegisterOAuthForm = ({ user }: { user: ExtendedUser }) => {
                 <FormField
                   control={form.control}
                   name="name"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem className="relative">
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
@@ -199,16 +199,14 @@ export const RegisterOAuthForm = ({ user }: { user: ExtendedUser }) => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="cpf_cnpj"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem className="relative">
                       <FormLabel>{role === "USER" ? "CPF" : "CNPJ"}</FormLabel>
                       <FormControl>
@@ -231,16 +229,14 @@ export const RegisterOAuthForm = ({ user }: { user: ExtendedUser }) => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
                   name="phone"
-                  render={({ field, fieldState }) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Telefone</FormLabel>
                       <FormControl>
@@ -257,9 +253,7 @@ export const RegisterOAuthForm = ({ user }: { user: ExtendedUser }) => {
                           disabled={isPending}
                         />
                       </FormControl>
-                      {fieldState.error && (
-                        <FormMessage>{fieldState.error.message}</FormMessage>
-                      )}
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
