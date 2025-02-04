@@ -19,6 +19,8 @@ export const ticketStatus = pgEnum("ticket_status", [
   "CANCELLED",
 ]);
 
+export const ticketGender = pgEnum("ticket_gender", ["MALE", "FEMALE"]);
+
 export const paymentStatus = pgEnum("payment_status", [
   "PENDING",
   "PAID",
@@ -99,6 +101,15 @@ export const twoFactorToken = pgTable("two_factor_token", {
   expires: timestamp("expires").notNull(),
 });
 
+export const passwordResetToken = pgTable("password_reset_token", {
+  id: varchar("id")
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  email: text("email").notNull(),
+  token: text("token").notNull().unique(),
+  expires: timestamp("expires").notNull(),
+});
+
 export const twoFactorConfirmation = pgTable("two_factor_confirmation", {
   id: varchar("id")
     .$defaultFn(() => createId())
@@ -134,6 +145,15 @@ export const categories = pgTable("categories", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
+export const ticketSector = pgTable("ticket_sectors", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+});
+
 export const events = pgTable("events", {
   id: text("id")
     .primaryKey()
@@ -150,8 +170,7 @@ export const events = pgTable("events", {
   neighborhood: text("neighborhood"),
   address: text("address"),
   uf: text("uf"),
-  startDate: timestamp("start_date", { withTimezone: true }).notNull(),
-  endDate: timestamp("end_date", { withTimezone: true }).notNull(),
+  date: timestamp("date", { withTimezone: true }),
   map: text("map"),
   organizerId: text("organizer_id").references(() => users.id, {
     onDelete: "cascade",
@@ -166,7 +185,7 @@ export const producerEvents = pgTable("producer_events", {
     .references(() => events.id, { onDelete: "cascade" }),
   producerName: text("producer_name").notNull(),
   showProducer: boolean("show_producer").default(false),
-  producer_description: text("producer_description"),
+  producerDescription: text("producer_description"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
@@ -175,9 +194,9 @@ export const eventDays = pgTable("event_days", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  eventId: text("event_id")
-    .notNull()
-    .references(() => producerEvents.eventId, { onDelete: "cascade" }),
+  eventId: text("event_id").references(() => producerEvents.eventId, {
+    onDelete: "cascade",
+  }),
   date: timestamp("date", { withTimezone: true }).notNull(),
   startTime: timestamp("start_time", { withTimezone: true }).notNull(),
   endTime: timestamp("end_time", { withTimezone: true }).notNull(),
@@ -185,28 +204,14 @@ export const eventDays = pgTable("event_days", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
-export const passwordResetToken = pgTable("password_reset_token", {
-  id: varchar("id")
-    .$defaultFn(() => createId())
-    .primaryKey(),
-  email: text("email").notNull(),
-  token: text("token").notNull().unique(),
-  expires: timestamp("expires").notNull(),
-});
-
-// TODO: Add event days ???
-
 export const batches = pgTable("batches", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  eventId: text("event_id")
-    .notNull()
-    .references(() => events.id, { onDelete: "cascade" }),
+  eventId: text("event_id").references(() => events.id, {
+    onDelete: "cascade",
+  }),
   name: text("name").notNull(),
-  price: integer("price").notNull(),
-  totalTickets: integer("total_tickets").notNull(),
-  soldTickets: integer("sold_tickets").default(0),
   startDate: timestamp("start_date", { withTimezone: true }).notNull(),
   endDate: timestamp("end_date", { withTimezone: true }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
@@ -228,6 +233,7 @@ export const tickets = pgTable("tickets", {
   }),
   price: integer("price").notNull(),
   isNominal: boolean("is_nominal").default(false).notNull(),
+  gender: ticketGender("gender"),
   status: ticketStatus("status"),
   purchaseDate: timestamp("purchase_date", { withTimezone: true }),
   quantity: integer("quantity").notNull(),
@@ -238,15 +244,6 @@ export const tickets = pgTable("tickets", {
   qrCode: text("qr_code").unique(),
   file: text("file").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-});
-
-export const ticketSector = pgTable("ticket_sectors", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
 export const ticketPurchases = pgTable("ticket_purchases", {

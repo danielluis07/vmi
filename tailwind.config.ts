@@ -72,6 +72,7 @@ export default {
         xxs: "400px",
         xs: "500px",
         lgg: "1200px",
+        maxmd: { max: "768px" },
         maxlgg: { max: "1200px" },
       },
       borderRadius: {

@@ -1,6 +1,6 @@
 {
-  "id": "36db46da-7efa-4680-b4d4-0837ebf362f6",
-  "prevId": "8013d282-a112-4d0f-bdbe-ca81b352e2f7",
+  "id": "2a50f9b8-552d-4479-9662-19dddce925f3",
+  "prevId": "31d7c19c-42a0-4f35-bcd3-4f7ad1729722",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -428,7 +428,7 @@
           "name": "image",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "status": {
           "name": "status",
@@ -442,25 +442,37 @@
           "type": "event_mode",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "location": {
-          "name": "location",
+        "city": {
+          "name": "city",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "start_date": {
-          "name": "start_date",
-          "type": "timestamp with time zone",
+        "neighborhood": {
+          "name": "neighborhood",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "end_date": {
-          "name": "end_date",
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uf": {
+          "name": "uf",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "name": "date",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "map": {
           "name": "map",
@@ -856,6 +868,45 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.ticket_sectors": {
+      "name": "ticket_sectors",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.tickets": {
       "name": "tickets",
       "schema": "",
@@ -870,7 +921,7 @@
           "name": "event_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "batch_id": {
           "name": "batch_id",
@@ -894,8 +945,15 @@
           "name": "is_nominal",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "ticket_gender",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
         },
         "status": {
           "name": "status",
@@ -910,11 +968,35 @@
           "primaryKey": false,
           "notNull": false
         },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sector_id": {
+          "name": "sector_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "obs": {
+          "name": "obs",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "qr_code": {
           "name": "qr_code",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "file": {
+          "name": "file",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -958,6 +1040,19 @@
           "tableTo": "user",
           "columnsFrom": [
             "buyer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "tickets_sector_id_ticket_sectors_id_fk": {
+          "name": "tickets_sector_id_ticket_sectors_id_fk",
+          "tableFrom": "tickets",
+          "tableTo": "ticket_sectors",
+          "columnsFrom": [
+            "sector_id"
           ],
           "columnsTo": [
             "id"
@@ -1235,6 +1330,14 @@
         "ADMIN",
         "USER",
         "PRODUCER"
+      ]
+    },
+    "public.ticket_gender": {
+      "name": "ticket_gender",
+      "schema": "public",
+      "values": [
+        "MALE",
+        "FEMALE"
       ]
     },
     "public.ticket_status": {

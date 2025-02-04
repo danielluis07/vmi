@@ -30,6 +30,7 @@ import { credentialsSignUp } from "@/app/auth/_actions/credentials-sign-up";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LoadingButton } from "@/components/ui/loading-button";
+import Link from "next/link";
 
 type FormData = z.infer<typeof credentialsSignUpSchema>;
 
@@ -132,56 +133,65 @@ export const SignUpCredentialsForm = () => {
           </CardHeader>
           <CardContent>
             {role === undefined && (
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value ?? undefined}
-                        className="flex flex-col space-y-1">
-                        <Label
-                          className={cn(
-                            role === "USER"
-                              ? "bg-secondary text-white"
-                              : "bg-white text-primary",
-                            role !== "PRODUCER" &&
-                              "hover:border-secondary hover:text-secondary",
-                            "flex items-center justify-center cursor-pointer p-3 border rounded-md transition-colors w-full"
-                          )}>
-                          <FormControl>
-                            <RadioGroupItem value="USER" className="hidden" />
-                          </FormControl>
-                          <User className="text-2xl mr-2" />
-                          <span className="text-lg">Usuário</span>
-                        </Label>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value ?? undefined}
+                          className="flex flex-col space-y-1">
+                          <Label
+                            className={cn(
+                              role === "USER"
+                                ? "bg-secondary text-white"
+                                : "bg-white text-primary",
+                              role !== "PRODUCER" &&
+                                "hover:border-secondary hover:text-secondary",
+                              "flex items-center justify-center cursor-pointer p-3 border rounded-md transition-colors w-full"
+                            )}>
+                            <FormControl>
+                              <RadioGroupItem value="USER" className="hidden" />
+                            </FormControl>
+                            <User className="text-2xl mr-2" />
+                            <span className="text-lg">Usuário</span>
+                          </Label>
 
-                        <Label
-                          className={cn(
-                            role === "DOCTOR"
-                              ? "bg-secondary text-white"
-                              : "bg-white text-primary",
-                            role !== "DOCTOR" &&
-                              "hover:border-secondary hover:text-secondary",
-                            "flex items-center justify-center cursor-pointer p-3 border rounded-md transition-colors w-full"
-                          )}>
-                          <FormControl>
-                            <RadioGroupItem
-                              value="PRODUCER"
-                              className="hidden"
-                            />
-                          </FormControl>
-                          <Briefcase className="text-2xl mr-2" />
-                          <span className="text-lg">Produtor</span>
-                        </Label>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                          <Label
+                            className={cn(
+                              role === "DOCTOR"
+                                ? "bg-secondary text-white"
+                                : "bg-white text-primary",
+                              role !== "DOCTOR" &&
+                                "hover:border-secondary hover:text-secondary",
+                              "flex items-center justify-center cursor-pointer p-3 border rounded-md transition-colors w-full"
+                            )}>
+                            <FormControl>
+                              <RadioGroupItem
+                                value="PRODUCER"
+                                className="hidden"
+                              />
+                            </FormControl>
+                            <Briefcase className="text-2xl mr-2" />
+                            <span className="text-lg">Produtor</span>
+                          </Label>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex justify-center mt-8">
+                  <Link
+                    href="/auth/sign-in"
+                    className="text-muted-foreground underline-offset-4 text-sm hover:underline">
+                    Voltar ao login
+                  </Link>
+                </div>
+              </div>
             )}
 
             {role !== undefined && (

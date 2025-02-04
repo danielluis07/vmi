@@ -46,16 +46,14 @@ export const createEvent = async (
       neighborhood,
       uf,
       mode,
-      startDate,
+      date,
       ticket,
-      endDate,
     } = validatedValues.data;
 
     if (
       !name ||
       !categoryId ||
-      !startDate ||
-      !endDate ||
+      !date ||
       !image ||
       !description ||
       !ticket ||
@@ -169,12 +167,11 @@ export const createEvent = async (
         image: signedURL.split("?")[0],
         categoryId,
         organizerId: session.user.id,
-        endDate,
+        date,
         address: address || null,
         city: city || null,
         neighborhood: neighborhood || null,
         uf: uf || null,
-        startDate,
         description,
         status: "ACTIVE",
         map: map || null,

@@ -36,11 +36,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DateTimePicker } from "@/components/ui/datetime-picker";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { CloudUpload, Paperclip } from "lucide-react";
+import { CloudUpload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createEventSchema, modes, uf } from "@/db/schemas";
 import { cn } from "@/lib/utils";
@@ -59,6 +58,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { CreateUserEventSkeleton } from "@/components/skeletons/create-user-event";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 
 type FormData = z.infer<typeof createEventSchema>;
 
@@ -68,7 +68,6 @@ export const CreateEventForm = () => {
   const { data: ticketSectors, isLoading: isTicketSectorsLoading } =
     useGetTicketSectors();
   const router = useRouter();
-
   const [isPending, startTransition] = useTransition();
   const [files, setFiles] = useState<File[] | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -81,8 +80,7 @@ export const CreateEventForm = () => {
       address: "",
       uf: "",
       description: "",
-      startDate: undefined,
-      endDate: undefined,
+      date: "",
       categoryId: "",
       mode: "IN_PERSON",
       image: [],
@@ -130,6 +128,8 @@ export const CreateEventForm = () => {
     });
   };
 
+  console.log("date:", form.watch("date"));
+
   if (isCategoriesLoading || isTicketSectorsLoading) {
     return <CreateUserEventSkeleton />;
   }
@@ -153,91 +153,23 @@ export const CreateEventForm = () => {
           className="space-y-5"
           onSubmit={form.handleSubmit(onSubmit, onInvalid)}>
           {/* row 1 */}
-          <div className="flex flex-col lgg:flex-row items-center justify-between gap-4">
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Título</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value ?? ""} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {categories ? (
-              <div className="w-full" style={{ paddingTop: "12px" }}>
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel>Categoria</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              disabled={isPending}
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground"
-                              )}>
-                              {field.value
-                                ? categories.find(
-                                    (category) => category.id === field.value
-                                  )?.name
-                                : "Selecione uma categoria"}{" "}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[350px] sm:w-[400px] md:w-[500px] lgg:w-[500px] p-0">
-                          <Command>
-                            <CommandInput placeholder="Procure uma categoria..." />
-                            <CommandList>
-                              <CommandEmpty>
-                                Nenhuma categoria encontrada
-                              </CommandEmpty>
-                              <CommandGroup>
-                                {categories.map((category) => (
-                                  <CommandItem
-                                    key={category.id}
-                                    onSelect={() =>
-                                      field.onChange(category.id)
-                                    }>
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        category.id === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {category.name}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            ) : (
-              <div>nenhuma categoria cadastrada</div>
-            )}
+          <div className="w-full lgg:w-1/2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Título</FormLabel>
+                  <FormControl>
+                    <Input {...field} value={field.value ?? ""} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           {/* row 2 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lgg:gap-14">
             <div className="col-span-1 sm:col-span-2 lg:col-span-1">
               <FormField
                 control={form.control}
@@ -272,14 +204,14 @@ export const CreateEventForm = () => {
             <div className="col-span-1 sm:col-span-1 lg:col-span-1">
               <FormField
                 control={form.control}
-                name="startDate"
+                name="date"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data de início</FormLabel>
+                  <FormItem className="flex flex-col pt-3">
+                    <FormLabel>Data</FormLabel>
                     <FormControl>
                       <DateTimePicker
-                        disabled={isPending}
-                        value={field.value}
+                        granularity="minute"
+                        value={field.value || undefined}
                         onChange={field.onChange}
                       />
                     </FormControl>
@@ -290,23 +222,72 @@ export const CreateEventForm = () => {
             </div>
 
             <div className="col-span-1 sm:col-span-1 lg:col-span-1">
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data de encerramento</FormLabel>
-                    <FormControl>
-                      <DateTimePicker
-                        disabled={isPending}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {categories ? (
+                <div className="w-full" style={{ paddingTop: "12px" }}>
+                  <FormField
+                    control={form.control}
+                    name="categoryId"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Categoria</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                disabled={isPending}
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between",
+                                  !field.value && "text-muted-foreground"
+                                )}>
+                                {field.value
+                                  ? categories.find(
+                                      (category) => category.id === field.value
+                                    )?.name
+                                  : "Selecione uma categoria"}{" "}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[350px] sm:w-[400px] md:w-[500px] lgg:w-[500px] p-0">
+                            <Command>
+                              <CommandInput placeholder="Procure uma categoria..." />
+                              <CommandList>
+                                <CommandEmpty>
+                                  Nenhuma categoria encontrada
+                                </CommandEmpty>
+                                <CommandGroup>
+                                  {categories.map((category) => (
+                                    <CommandItem
+                                      key={category.id}
+                                      onSelect={() =>
+                                        field.onChange(category.id)
+                                      }>
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          category.id === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                      {category.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ) : (
+                <div>nenhuma categoria cadastrada</div>
+              )}
             </div>
           </div>
 

@@ -14,8 +14,7 @@ type Event = {
   neighborhood: string;
   address: string;
   uf: string;
-  startDate: string;
-  endDate: string;
+  date: string;
   map: string | null;
   organizerId: string;
   createdAt: string;

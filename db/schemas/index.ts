@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { users, events, tickets } from "@/db/schema";
+import { users, events, tickets, eventDays, batches } from "@/db/schema";
 import { createInsertSchema } from "drizzle-zod";
 import { File } from "node-fetch";
 
@@ -8,6 +8,10 @@ export const baseUserSchema = createInsertSchema(users);
 export const baseEventSchema = createInsertSchema(events);
 
 const baseTicketsSchema = createInsertSchema(tickets);
+
+const baseEventDaysSchema = createInsertSchema(eventDays);
+
+const baseBatchesSchema = createInsertSchema(batches);
 
 export const credentialsSignUpSchema = baseUserSchema
   .extend({
@@ -46,9 +50,64 @@ export const credentialsSignInSchema = baseUserSchema.extend({
 
 export const createEventSchema = baseEventSchema.extend({
   image: z.array(z.instanceof(File)).optional(), // Enforce File[] type
+  date: z
+    .union([z.string(), z.date()])
+    .transform((val) =>
+      typeof val === "string" && val !== "" ? new Date(val) : val
+    ),
   ticket: baseTicketsSchema.extend({
     file: z.instanceof(File).optional(),
   }),
+});
+
+const batchesSchema = baseBatchesSchema.extend({
+  startDate: z
+    .union([z.string(), z.date()])
+    .transform((val) =>
+      typeof val === "string" && val !== "" ? new Date(val) : val
+    ),
+  endDate: z
+    .union([z.string(), z.date()])
+    .transform((val) =>
+      typeof val === "string" && val !== "" ? new Date(val) : val
+    ),
+  tickets: z.array(
+    baseTicketsSchema.extend({ file: z.instanceof(File).optional() })
+  ),
+});
+
+export const createProducerEventSchema = baseEventSchema.extend({
+  image: z.array(z.instanceof(File)).optional(),
+  startDate: z
+    .union([z.string(), z.date()])
+    .transform((val) =>
+      typeof val === "string" && val !== "" ? new Date(val) : val
+    ),
+  endDate: z
+    .union([z.string(), z.date()])
+    .transform((val) =>
+      typeof val === "string" && val !== "" ? new Date(val) : val
+    ),
+  days: z.array(
+    baseEventDaysSchema.extend({
+      batches: z.array(batchesSchema),
+      date: z
+        .union([z.string(), z.date()])
+        .transform((val) =>
+          typeof val === "string" && val !== "" ? new Date(val) : val
+        ),
+      startTime: z
+        .union([z.string(), z.date()])
+        .transform((val) =>
+          typeof val === "string" && val !== "" ? new Date(val) : val
+        ),
+      endTime: z
+        .union([z.string(), z.date()])
+        .transform((val) =>
+          typeof val === "string" && val !== "" ? new Date(val) : val
+        ),
+    })
+  ),
 });
 
 export const modes: Array<"IN_PERSON" | "ONLINE"> = ["IN_PERSON", "ONLINE"];
